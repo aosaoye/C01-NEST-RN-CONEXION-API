@@ -6,7 +6,7 @@ export class PizzasController {
   constructor(private readonly pizzasService: PizzasService) { }
 
   @Get()
-  findAll() {
+  findAll(): any {
     return this.pizzasService.findAll();
   }
 }
