@@ -1,41 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { MASCOTAS_API } from '../constants/petsApi.js';
+
+
+export interface Pet {
+    id: number;
+    nombre: string;
+    raza: string;
+    edad: number;
+    imagen: string;
+}
 
 @Injectable()
 export class MascotasService {
-    private readonly mascotas = [
-        {
-            id: 1,
-            nombre: 'Pelusa',
-            raza: 'gato',
-            edad: 5,
-        },
-        {
-            id: 2,
-            nombre: 'Bobby',
-            raza: 'perro',
-            edad: 3,
-        },
-        {
-            id: 3,
-            nombre: 'Punky',
-            raza: 'gato',
-            edad: 2,
-        },
-        {
-            id: 4,
-            nombre: 'Bobby',
-            raza: 'perro',
-            edad: 1,
-        },
-        {
-            id: 5,
-            nombre: 'Bobby',
-            raza: 'perro',
-            edad: 1,
-        },
-    ];
 
-    findOne(id: number) {
-        return this.mascotas.find(mascota => mascota.id === id);
+    private readonly mascotas: Pet[] = MASCOTAS_API;
+
+    async findAll(): Promise<Pet[]> {
+        return Promise.resolve(this.mascotas);
+    }
+
+    async findOne(id: number): Promise<Pet> {
+        const mascota = this.mascotas.find(mascota => mascota.id === id);
+        if(!mascota) throw new NotFoundException(`Mascota con id ${id} no encontrada`);
+        return Promise.resolve(mascota);
     }
 }
